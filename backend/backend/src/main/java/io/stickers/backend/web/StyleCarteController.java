@@ -1,5 +1,7 @@
 package io.stickers.backend.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,6 +65,26 @@ public class StyleCarteController {
 		}
 	
 	}
+	
+	@RequestMapping(value="/stylecarte/list", method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	@JsonView(StyleCarteOnly.class)
+	public Iterable<StyleCarte> list(){
+		return styleCarteRepository.findAll();
+	}
+	
+	@RequestMapping(value="/stylecarte/find/{id:[0-9]+}", method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	@JsonView(StyleCarteOnly.class)
+	public StyleCarte find(@PathVariable("id") int id){
+		
+		
+		StyleCarte sc= styleCarteRepository.findOne(id);
+		if (sc == null)
+			throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Style non trouvé");
+		return sc;
+	}
+	
 	
 
 }
